@@ -1,0 +1,34 @@
+// Definición de velocidades y tiempos
+vel_lineal = 0.5         // metros por segundo
+vel_angular = 0.5        // radianes por segundo
+dist_recorrer = 2        // metros
+angulo_giro = 90         // grados
+
+// Calcular tiempos
+tiempo_recto = dist_recorrer / vel_lineal       // Tiempo para recorrer 2 metros
+tiempo_rotacion = (pi / 2) / vel_angular        // Tiempo para girar 90 grados
+
+// Función para avanzar en línea recta
+funcion avanzar_recto(vel_lineal, tiempo_recto):
+    enviar_velocidad(vel_lineal, 0)
+    esperar(tiempo_recto)
+    detener()
+
+// Función para girar en el lugar
+funcion rotar(vel_angular, tiempo_rotacion):
+    enviar_velocidad(0, vel_angular)
+    esperar(tiempo_rotacion)
+    detener()
+
+// Secuencia de movimientos para seguir un trayecto cuadrado
+para i = 0 hasta 3:
+    avanzar_recto(vel_lineal, tiempo_recto)
+    rotar(vel_angular, tiempo_rotacion)
+
+// Función para detener el robot
+funcion detener():
+    enviar_velocidad(0, 0)
+
+// Función para enviar el comando de velocidad al robot
+funcion enviar_velocidad(lineal, angular):
+    ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: lineal, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: angular}}" --once
